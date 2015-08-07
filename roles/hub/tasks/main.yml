@@ -24,11 +24,7 @@
   template: src=docker-compose.yml.j2 dest={{ hub.app_dir }}/docker-compose.yml
   register: compose_file
 
-- name: docker compose build
-  command: docker-compose build web resque resquescheduler chdir={{ hub.app_dir }}
-  when: compose_file.changed or force_compose
-
 - name: docker compose up
-  command: docker-compose up --no-deps -d web resque resquescheduler chdir={{ hub.app_dir }}
-  when: compose_file.changed or force_compose
+  command: docker-compose up chdir={{ hub.app_dir }}
+  # when: compose_file.changed or force_compose
 

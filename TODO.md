@@ -14,3 +14,4 @@ Pending tasks
 - Ansible pull from target host
 - Vault for secrets
 - Haproxy or nginx as proxy
+- Monitor services and restart them if needed
