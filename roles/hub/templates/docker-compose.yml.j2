@@ -1,0 +1,42 @@
+# {{ ansible_managed }}
+
+db:
+  image: postgres:9.3.5
+  environment:
+    - PGDATA=/var/lib/postgresql/data/pgdata
+  volumes:
+    - 'pgdata:/var/lib/postgresql/data/pgdata'
+
+redis:
+  image: redis:2.8.21
+
+web:
+  image: instedd/hub:{{ hub.version }}
+  links:
+    - db
+    - redis
+  env_file: .docker-env
+  volumes:
+    - 'config/guisso.yml:/app/config/guisso.yml'
+    - 'config/database.yml:/app/config/database.yml'
+    - 'config/poirot.yml:/app/config/poirot.yml'
+    - 'config/settings.yml:/app/config/settings.local.yml'
+    - 'log:/app/log'
+  ports:
+    - {{ hub.port }}:80
+
+resque:
+  image: instedd/hub:{{ hub.version }}
+  links:
+    - db
+    - redis
+  command: rake resque:work QUEUE=hub TERM_CHILD=1 FORK_PER_JOB=false
+  env_file: .docker-env
+
+resquescheduler:
+  image: instedd/hub:{{ hub.version }}
+  links:
+    - db
+    - redis
+  command: rake resque:scheduler
+  env_file: .docker-env

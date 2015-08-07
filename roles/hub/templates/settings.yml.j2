@@ -1,0 +1,13 @@
+host: {{ hub.hostname }}
+authentication_token: secret
+
+poirot:
+  elasticsearch_url: localhost:9200
+
+{% if hub.google.enabled %}
+google:
+  app_id: {{ hub.google.app_id }}
+  client_id: {{ hub.google.client_id }}
+  client_secret: {{ hub.google.client_secret }}
+  browser_key: {{ hub.google.browser_key }}
+{% endif %}

@@ -1,0 +1,34 @@
+---
+- name: create hub folders
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ hub.app_dir }}"
+    - "{{ hub.app_dir }}/pgdata"
+    - "{{ hub.app_dir }}/config"
+    - "{{ hub.app_dir }}/log"
+
+- name: create hub env file for docker compose
+  template: src=docker-env.j2 dest={{ hub.app_dir }}/.docker-env
+
+- name: create hub config files
+  template: src={{ item }}.j2 dest={{ hub.app_dir }}/config/{{item}}
+  with_items:
+    - guisso.yml
+    - poirot.yml
+    - settings.yml
+
+- name: create hub database config file
+  file: src=database.yml dest={{ hub.app_dir }}/config/database.yml
+
+- name: create hub docker compose file
+  template: src=docker-compose.yml.j2 dest={{ hub.app_dir }}/docker-compose.yml
+  register: compose_file
+
+- name: docker compose build
+  command: docker-compose build web resque resquescheduler chdir={{ hub.app_dir }}
+  when: compose_file.changed or force_compose
+
+- name: docker compose up
+  command: docker-compose up --no-deps -d web resque resquescheduler chdir={{ hub.app_dir }}
+  when: compose_file.changed or force_compose
+

@@ -1,0 +1,5 @@
+production:
+  enabled: {{ hub.poirot.enabled  }}
+  server: {{ hub.poirot.server | default('') }}
+  source: instedd-hub
+  debug: false

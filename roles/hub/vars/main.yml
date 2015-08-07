@@ -1,0 +1,15 @@
+---
+hub:
+  version: 1.0.1
+  hostname: hub-local.instedd.org
+  port: 80
+
+  app_dir: /u/apps/hub
+  secret_key_base: test-secret-key
+
+  poirot:
+    enabled: false
+  guisso:
+    enabled: false
+  google:
+    enabled: false
