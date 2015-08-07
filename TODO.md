@@ -6,6 +6,8 @@ Pending tasks
 - Poirot receiver
 - Poirot elasticsearch
 - Schedule backups
+- Logging for web app and services
+- Disable newrelic agent
 - Log rotate for docker and apps
 - Handlers for docker-compose up
 - Cleanup docker images
