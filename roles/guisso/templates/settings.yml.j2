@@ -1,0 +1,8 @@
+secret_token: {{ guisso.secret_token }}
+devise_secret_key: {{ guisso.devise_secret_key }}
+devise_email: {{ guisso.email_sender }}
+whitelisted_hosts: {{ guisso.whitelisted_hosts }}
+
+google:
+  client_id: {{ guisso.google.client_id | default('') }}
+  client_secret: {{ guisso.google.client_secret | default('') }}

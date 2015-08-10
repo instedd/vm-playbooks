@@ -1,0 +1,26 @@
+---
+- name: create guisso folders
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ guisso.app_dir }}"
+    - "{{ guisso.app_dir }}/config"
+    - "{{ guisso.app_dir }}/log"
+
+- name: create guisso config files
+  template: src={{ item }}.j2 dest={{ guisso.app_dir }}/config/{{item}}
+  with_items:
+    - settings.yml
+
+- name: create guisso docker compose file
+  template: src=docker-compose.yml.j2 dest={{ guisso.app_dir }}/docker-compose.yml
+
+- name: migrate guisso database
+  command: docker-compose run --rm -T web bash /app/migrate chdir={{ guisso.app_dir }}
+
+- name: docker compose up guisso application
+  command: docker-compose up --force-recreate -d chdir={{ guisso.app_dir }}
+
+- name: register apps in guisso
+  command: docker-compose run --rm -T web rake apps:create[{{ item.key }},{{ item.value.hostname }},{{ item.value.trusted }}] chdir={{ guisso.app_dir }}
+  register: "{{ item.value.register }}"
+  with_dict: "{{ guisso.apps }}"

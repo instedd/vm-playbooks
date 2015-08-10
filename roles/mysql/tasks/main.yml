@@ -1,0 +1,23 @@
+---
+- name: create data folder
+  file: path={{ mysql.data_dir }} state=directory
+
+- name: inspect if mysql container has been defined
+  shell: docker inspect mysql > /dev/null
+  register: inspect
+  ignore_errors: True
+
+- name: create mysql container
+  when: inspect|failed
+  command: >
+    docker run --name mysql --restart=on-failure:5
+      -e MYSQL_ROOT_PASSWORD={{ mysql.root_password }}
+      -v {{ mysql.data_dir }}:/var/lib/mysql
+      -d mysql:{{ mysql.version }}
+
+- name: start mysql container
+  command: docker start mysql
+
+- name: waiting 20s for mysql to start
+  pause: seconds=20
+  when: inspect|failed

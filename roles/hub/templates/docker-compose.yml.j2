@@ -26,23 +26,18 @@ web:
   ports:
     - {{ hub.port }}:80
 
-migrate:
-  image: instedd/hub:{{ hub.version }}
-  links:
-    - db
-    - redis
-  volumes_from:
-    - web
-  env_file: .docker-env
-  command: rake db:setup
-
 resque:
   image: instedd/hub:{{ hub.version }}
   links:
     - db
     - redis
-  volumes_from:
-    - web
+  volumes:
+    - 'config/guisso.yml:/app/config/guisso.yml'
+    - 'config/database.yml:/app/config/database.yml'
+    - 'config/poirot.yml:/app/config/poirot.yml'
+    - 'config/secrets.yml:/app/config/secrets.yml'
+    - 'config/settings.yml:/app/config/settings.local.yml'
+    - 'log:/app/log'
   command: rake resque:work QUEUE=hub TERM_CHILD=1 FORK_PER_JOB=false
   env_file: .docker-env
 
@@ -51,7 +46,12 @@ resquescheduler:
   links:
     - db
     - redis
-  volumes_from:
-    - web
+  volumes:
+    - 'config/guisso.yml:/app/config/guisso.yml'
+    - 'config/database.yml:/app/config/database.yml'
+    - 'config/poirot.yml:/app/config/poirot.yml'
+    - 'config/secrets.yml:/app/config/secrets.yml'
+    - 'config/settings.yml:/app/config/settings.local.yml'
+    - 'log:/app/log'
   command: rake resque:scheduler
   env_file: .docker-env

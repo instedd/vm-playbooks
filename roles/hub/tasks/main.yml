@@ -29,8 +29,14 @@
 #   command: docker-compose build web resque resquescheduler chdir={{ hub.app_dir }}
 #   when: compose_file.changed or force_compose
 
-- name: docker compose up
-  command: docker-compose up -d chdir={{ hub.app_dir }}
+- name: docker compose up databases
+  command: docker-compose up -d db redis chdir={{ hub.app_dir }}
+
+- name: migrate database
+  command: docker-compose run --rm -T web bash /app/migrate chdir={{ hub.app_dir }}
+
+- name: docker compose up application
+  command: docker-compose up --force-recreate -d chdir={{ hub.app_dir }}
 
 # - include: "../../docker/tasks/rebuild_service.yml"
 #   vars:

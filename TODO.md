@@ -17,3 +17,5 @@ Pending tasks
 - Vault for secrets
 - Haproxy or nginx as proxy
 - Monitor services and restart them if needed
+- Configure mailers
+- Register in guisso remotely

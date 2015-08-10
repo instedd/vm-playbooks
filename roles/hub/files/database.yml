@@ -1,6 +1,6 @@
 production:
   adapter: postgresql
-  url: <%= ENV['DATABASE_URL'] %>
+  url: postgres://postgres:@db/hub
   pool: 5
   encoding: unicode
 

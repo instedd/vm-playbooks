@@ -1,0 +1,14 @@
+web:
+  image: instedd/guisso:{{ guisso.version }}
+  environment:
+    RAILS_ENV: production
+    DATABASE_URL: mysql2://root:{{mysql.root_password}}@db/guisso
+    RAILS_CONFIG__action_mailer__smtp_settings__address: smtp
+  external_links:
+    - mysql:db
+  volumes:
+    - 'config/settings.yml:/app/config/settings.yml'
+    - 'log:/app/log'
+  ports:
+    - {{ guisso.port }}:80
+
