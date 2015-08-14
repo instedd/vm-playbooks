@@ -22,5 +22,6 @@
 
 - name: register apps in guisso
   command: docker-compose run --rm -T web rake apps:create[{{ item.key }},{{ item.value.hostname }},{{ item.value.trusted }}] chdir={{ guisso.app_dir }}
-  register: "{{ item.value.register }}"
-  with_dict: "{{ guisso.apps }}"
+  with_dict: guisso.apps
+  register: guissoclients
+

@@ -12,11 +12,8 @@ hub:
   guisso:
     enabled: false
 
-  google: {}
-
 guisso:
   apps:
     hub:
       hostname: hub-local.instedd.org
       trusted: trusted
-      register: hub.guisso.output

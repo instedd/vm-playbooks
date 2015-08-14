@@ -4,7 +4,7 @@ authentication_token: secret
 poirot:
   elasticsearch_url: localhost:9200
 
-{% if hub.google.enabled %}
+{% if hub.google is defined %}
 google:
   app_id: {{ hub.google.app_id }}
   client_id: {{ hub.google.client_id }}

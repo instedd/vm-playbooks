@@ -25,10 +25,6 @@
   template: src=docker-compose.yml.j2 dest={{ hub.app_dir }}/docker-compose.yml
   register: compose_file
 
-# - name: docker compose build
-#   command: docker-compose build web resque resquescheduler chdir={{ hub.app_dir }}
-#   when: compose_file.changed or force_compose
-
 - name: docker compose up databases
   command: docker-compose up -d db redis chdir={{ hub.app_dir }}
 
@@ -37,9 +33,3 @@
 
 - name: docker compose up application
   command: docker-compose up --force-recreate -d chdir={{ hub.app_dir }}
-
-# - include: "../../docker/tasks/rebuild_service.yml"
-#   vars:
-#     work_dir: "{{ hub.app_dir }}"
-#     service: migrate web resque resquescheduler
-#   when: compose_file.changed or force_compose
