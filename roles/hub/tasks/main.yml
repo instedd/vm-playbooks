@@ -10,6 +10,11 @@
 - name: create hub env file for docker compose
   template: src=docker-env.j2 dest={{ hub.app_dir }}/.docker-env
 
+- name: register hub in guisso
+  command: docker-compose run --rm -T web rake apps:create[hub,hub-local.instedd.org,trusted] chdir={{ guisso.app_dir }}
+  register: hub_guisso
+  when: hub.guisso.enabled
+
 - name: create hub config files
   template: src={{ item }}.j2 dest={{ hub.app_dir }}/config/{{item}}
   with_items:

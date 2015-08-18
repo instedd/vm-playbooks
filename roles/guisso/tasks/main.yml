@@ -19,9 +19,3 @@
 
 - name: docker compose up guisso application
   command: docker-compose up --force-recreate -d chdir={{ guisso.app_dir }}
-
-- name: register apps in guisso
-  command: docker-compose run --rm -T web rake apps:create[{{ item.key }},{{ item.value.hostname }},{{ item.value.trusted }}] chdir={{ guisso.app_dir }}
-  with_dict: guisso.apps
-  register: guissoclients
-

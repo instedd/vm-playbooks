@@ -10,10 +10,5 @@ hub:
   poirot:
     enabled: false
   guisso:
-    enabled: false
-
-guisso:
-  apps:
-    hub:
-      hostname: hub-local.instedd.org
-      trusted: trusted
+    enabled: true
+    url: http://guisso

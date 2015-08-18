@@ -1,5 +1,0 @@
----
-- name: register app in guisso
-  command: docker-compose run --rm -T web rake apps:create[{{ app }},{{ hostname }},{{ trusted }}] chdir={{ guisso.app_dir }}
-  register: guisso_output
-

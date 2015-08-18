@@ -1,10 +1,3 @@
 enabled: {{ hub.guisso.enabled | lower }}
 url: {{ hub.guisso.url | default('') }}
-{% for guissoclient in guissoclients.results %}
-{% if guissoclient.item.key == "hub" %}
-{{ guissoclient.stdout }}
-{% endif %}
-{% endfor %}
-
-{# Replace the loop above by this single line when ansible upgrades to jinja 2.8 and supports the equalto operator #}
-{# guissoclients.results | selectattr("item.key", "equalto", "hub") | map(attribute="stdout") | first | default('') #}
+{{ hub_guisso.stdout | default('') }}
