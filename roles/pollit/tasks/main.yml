@@ -1,0 +1,46 @@
+---
+- name: create pollit folders
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ pollit.app_dir }}"
+    - "{{ pollit.app_dir }}/config"
+    - "{{ pollit.app_dir }}/log"
+
+- name: register pollit in guisso
+  guisso_register_app: name=pollit host={{pollit.hostname}} trusted=true
+  register: pollit_guisso
+  when: pollit.guisso.enabled
+
+- name: register pollit in hub
+  hub_register_app: name="Pollit Local" host={{pollit.hostname}} type=PollitConnector
+  register: pollit_hub
+  when: pollit.hub.enabled
+
+- name: register pollit in nuntium
+  nuntium_register_app: >
+    name={{pollit.nuntium.application}}
+    password={{pollit.nuntium.pass}}
+    url={{pollit.nuntium.url}}
+    account_name={{pollit.nuntium.account_name}}
+    account_pass={{pollit.nuntium.account_pass}}
+    interface_user={{pollit.nuntium.interface_user}}
+    interface_pass={{pollit.nuntium.interface_pass}}
+  register: pollit_nuntium
+
+- name: create pollit config files
+  template: src={{ item }}.j2 dest={{ pollit.app_dir }}/config/{{item}}
+  with_items:
+    - guisso.yml
+    - nuntium.yml
+    - settings.yml
+    - hub.yml
+
+- name: create pollit docker compose file
+  template: src=docker-compose.yml.j2 dest={{ pollit.app_dir }}/docker-compose.yml
+  register: compose_file
+
+- name: migrate database
+  command: docker-compose run --rm -T web bash /app/migrate chdir={{ pollit.app_dir }}
+
+- name: docker compose up application
+  command: docker-compose up --force-recreate -d chdir={{ pollit.app_dir }}

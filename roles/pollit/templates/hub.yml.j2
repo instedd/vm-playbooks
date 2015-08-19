@@ -1,0 +1,6 @@
+enabled: {{ pollit.hub.enabled }}
+{% if pollit.hub.enabled %}
+url: {{ pollit.hub.url }}
+connector_guid: {{ pollit_hub.guid }}
+token: {{ pollit_hub.secret_token }}
+{% endif %}

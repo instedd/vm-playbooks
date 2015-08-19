@@ -1,0 +1,30 @@
+# {{ ansible_managed }}
+
+web: &defaults
+  image: instedd/pollit:{{ pollit.version }}
+  hostname: {{ pollit.hostname }}
+  external_links:
+    - nuntium
+    - hub
+    - guisso
+    - mysql
+  environment:
+    DATABASE_URL: mysql2://root:root@mysql/pollit
+  volumes:
+    - 'config/guisso.yml:/app/config/guisso.yml'
+    - 'config/settings.yml:/app/config/settings.yml'
+    - 'config/nuntium.yml:/app/config/nuntium.yml'
+    - 'config/hub.yml:/app/config/hub.yml'
+    - 'log:/app/log'
+  ports:
+    - "{{ pollit.port }}:80"
+
+delayed:
+  <<: *defaults
+  command: bundle exec rake jobs:work
+  ports: []
+
+hubimport:
+  <<: *defaults
+  command: bundle exec rake hub:import
+  ports: []
