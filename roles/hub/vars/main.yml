@@ -2,7 +2,7 @@
 hub:
   version: 1.0.3-pre3
   hostname: hub
-  port: 80
+  port: 8010
 
   app_dir: /u/apps/hub
   secret_key_base: 9afab09f4e6157d98fcd75f44b5077f3d68435a9cb051aef9f4c62008534a48eed51a70986f3c3e01d493634b0e1553e805c170ba2d45bc2d93363b2578be6b1
