@@ -1,7 +1,7 @@
 ---
 hub:
   version: 1.0.2-latest
-  hostname: hub-local.instedd.org
+  hostname: hub
   port: 80
 
   app_dir: /u/apps/hub

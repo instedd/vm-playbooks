@@ -1,0 +1,64 @@
+---
+- name: create nuntium folders
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ nuntium.app_dir }}"
+    - "{{ nuntium.app_dir }}/config"
+    - "{{ nuntium.app_dir }}/log"
+    - "{{ nuntium.app_dir }}/rabbitmq"
+    - "{{ nuntium.app_dir }}/rabbitmq/log"
+    - "{{ nuntium.app_dir }}/rabbitmq/mnesia"
+
+- name: register nuntium in guisso
+  command: docker-compose run --rm -T web rake apps:create[nuntium,{{ nuntium.hostname }},trusted] chdir={{ guisso.app_dir }}
+  register: nuntium_guisso
+  when: nuntium.guisso.enabled
+
+- name: create nuntium config files
+  template: src={{ item }}.j2 dest={{ nuntium.app_dir }}/config/{{item}}
+  with_items:
+    - amqp.yml
+    - settings.yml
+    - guisso.yml
+
+- name: create nuntium docker compose file
+  template: src=docker-compose.yml.j2 dest={{ nuntium.app_dir }}/docker-compose.yml
+  register: compose_file
+
+- name: inspect if rabbitmq and memcached containers have been defined
+  shell: docker inspect rabbitmq memcached > /dev/null
+  register: inspect
+  failed_when: "inspect.rc > 1 or (inspect.rc == 1 and 'No such image or container' not in inspect.stderr)"
+
+- name: docker compose up rabbitmq and memcached
+  command: docker-compose up -d rabbitmq memcached chdir={{ nuntium.app_dir }}
+  when: "inspect.rc == 1"
+
+- name: waiting 20s for rabbitmq and memcached to start
+  pause: seconds=20
+  when: "inspect.rc == 1"
+
+- name: setup rabbitmq vhost
+  command: docker exec rabbitmq rabbitmqctl add_vhost {{ nuntium.amqp.vhost }}
+  register: docker_exec_result
+  failed_when: "docker_exec_result.rc not in [0,2]"
+
+- name: setup rabbitmq user
+  command: docker exec rabbitmq rabbitmqctl add_user {{ nuntium.amqp.user }} {{ nuntium.amqp.pass }}
+  register: docker_exec_result
+  failed_when: "docker_exec_result.rc not in [0,2]"
+
+- name: set rabbimtq user password
+  command: docker exec rabbitmq rabbitmqctl change_password {{ nuntium.amqp.user }} {{ nuntium.amqp.pass }}
+  when: "docker_exec_result.rc == 2"
+
+- name: setup rabbitmq user permissions
+  command: docker exec rabbitmq rabbitmqctl set_permissions -p {{ nuntium.amqp.vhost }} {{ nuntium.amqp.user }} ".*" ".*" ".*"
+  register: docker_exec_result
+  failed_when: "docker_exec_result.rc not in [0,2]"
+
+- name: migrate database
+  command: docker-compose run --rm -T web bash /app/migrate chdir={{ nuntium.app_dir }}
+
+- name: docker compose up application
+  command: docker-compose up --force-recreate --no-deps -d web workerfast workerslow xmpp smpp msn cron sched chdir={{ nuntium.app_dir }}
