@@ -12,6 +12,7 @@ redis:
 
 web:
   image: instedd/hub:{{ hub.version }}
+  container_name: hub
   links:
     - db
     - redis

@@ -1,3 +1,4 @@
 enabled: {{ hub.guisso.enabled | lower }}
 url: {{ hub.guisso.url | default('') }}
-{{ hub_guisso.stdout | default('') }}
+client_id: {{ hub_guisso.client_id | default('') }}
+client_secret: {{ hub_guisso.client_secret | default('') }}

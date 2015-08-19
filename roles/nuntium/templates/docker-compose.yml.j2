@@ -15,60 +15,58 @@ memcached:
   image: memcached:1.4.24
   container_name: memcached
 
-web: &base
+web:
   image: instedd/nuntium:{{nuntium.version}}
-  links:
+  container_name: nuntium
+  links: &links
     - rabbitmq
     - memcached
-  external_links:
+  external_links: &external_links
     - mysql
   environment: &environment
     RAILS_ENV: production
     DATABASE_URL: mysql2://root:root@mysql/nuntium
-  volumes:
+  volumes: &volumes
     - 'config/amqp.yml:/app/config/amqp.yml'
     - 'config/guisso.yml:/app/config/guisso.yml'
     - 'config/settings.yml:/app/config/settings.yml'
   ports:
     - {{ nuntium.port }}:80
 
+cron: &service
+  image: instedd/nuntium:{{nuntium.version}}
+  links: *links
+  external_links: *external_links
+  environment: *environment
+  volumes: *volumes
+  command: "bundle exec lib/services/cron_daemon.rb"
+
 workerfast:
-  <<: *base
+  <<: *service
   environment:
     <<: *environment
     INSTANCE_ID: 1000
   command: "bundle exec lib/services/generic_worker_daemon.rb ${RAILS_ENV} fast ${INSTANCE_ID}"
-  ports: []
 
 workerslow:
-  <<: *base
+  <<: *service
   environment:
     <<: *environment
     INSTANCE_ID: 2000
   command: "bundle exec lib/services/generic_worker_daemon.rb ${RAILS_ENV} slow ${INSTANCE_ID}"
-  ports: []
 
 xmpp:
-  <<: *base
-  ports: []
+  <<: *service
   command: "bundle exec lib/services/xmpp_service_daemon.rb"
 
 smpp:
-  <<: *base
-  ports: []
+  <<: *service
   command: "bundle exec lib/services/smpp_service_daemon.rb"
 
 msn:
-  <<: *base
-  ports: []
+  <<: *service
   command: "bundle exec lib/services/msn_service_daemon.rb"
 
-cron:
-  <<: *base
-  ports: []
-  command: "bundle exec lib/services/cron_daemon.rb"
-
 sched:
-  <<: *base
-  ports: []
+  <<: *service
   command: "bundle exec lib/services/scheduled_jobs_service_daemon.rb"

@@ -1,5 +1,6 @@
 web:
   image: instedd/guisso:{{ guisso.version }}
+  container_name: guisso
   environment:
     RAILS_ENV: production
     DATABASE_URL: mysql2://root:{{mysql.root_password}}@db/guisso

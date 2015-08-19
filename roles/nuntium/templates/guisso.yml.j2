@@ -1,3 +1,5 @@
 enabled: {{ nuntium.guisso.enabled | lower }}
 url: {{ nuntium.guisso.url | default('') }}
-{{ nuntium_guisso.stdout | default('') }}
+client_id: {{ nuntium_guisso.client_id | default('') }}
+client_secret: {{ nuntium_guisso.client_secret | default('') }}
+

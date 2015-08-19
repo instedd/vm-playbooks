@@ -10,7 +10,7 @@
     - "{{ nuntium.app_dir }}/rabbitmq/mnesia"
 
 - name: register nuntium in guisso
-  command: docker-compose run --rm -T web rake apps:create[nuntium,{{ nuntium.hostname }},trusted] chdir={{ guisso.app_dir }}
+  guisso_register_app: name=nuntium host={{nuntium.hostname}} trusted=true
   register: nuntium_guisso
   when: nuntium.guisso.enabled
 

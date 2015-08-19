@@ -16,6 +16,7 @@
 
 - name: migrate guisso database
   command: docker-compose run --rm -T web bash /app/migrate chdir={{ guisso.app_dir }}
+  tags: ["migration"]
 
 - name: docker compose up guisso application
   command: docker-compose up --force-recreate -d chdir={{ guisso.app_dir }}
