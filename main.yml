@@ -1,0 +1,11 @@
+- hosts: all
+  roles:
+    - guisso
+    - hub
+    - nuntium
+    - pollit
+  vars:
+    local:  { hostname: "local.instedd.org" }
+    guisso: { hostname: "local.instedd.org", port: 8000 }
+
+

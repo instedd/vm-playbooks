@@ -4,7 +4,7 @@
 
 ## Run
 
-To deploy the `test.yml` playbook on a Vagrant machine, run:
+To deploy the `main.yml` playbook on a Vagrant machine, run:
 
 ```bash
 vagrant up

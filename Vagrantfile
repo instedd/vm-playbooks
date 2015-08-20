@@ -10,11 +10,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :private_network, type: :dhcp
 
   config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.customize ["modifyvm", :id, "--memory", "4096"]
   end
 
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "test.yml"
+    ansible.playbook = "main.yml"
     ansible.sudo = true
     ansible.extra_vars = { ansible_ssh_user: 'vagrant' }
     ansible.host_key_checking = false
