@@ -1,21 +1,19 @@
 # TODOs
 
-Pending tasks
+Pending tasks:
 
-- Guisso and pre create apps
+- Configure mailers
+- Log rotate for docker and apps
+- Monitor services and restart them on host reboot
+
+Other pending tasks:
+
 - Poirot receiver
 - Poirot elasticsearch
 - Schedule backups
-- Logging for web app and services
-- Disable newrelic agent
-- Log rotate for docker and apps
-- Handlers for docker-compose up
 - Cleanup docker images
-- Migrate databases
 - Upgrading apps to newer version
 - Ansible pull from target host
 - Vault for secrets
-- Haproxy or nginx as proxy
-- Monitor services and restart them if needed
-- Configure mailers
-- Register in guisso remotely
+- Set guisso and hub registrations as host facts
+- Move these tasks to issues
