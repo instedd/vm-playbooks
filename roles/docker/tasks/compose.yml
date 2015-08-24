@@ -1,0 +1,15 @@
+---
+- name: get setuptools
+  apt: name=python-setuptools state=present
+
+- name: make sure pip works
+  shell: easy_install -U pip creates=/usr/local/bin/pip
+
+- name: upgrade distribute pip package due to issue with docker compose pip installation
+  pip: name=distribute version=0.7.3
+
+- name: install docker-py
+  pip: name=docker-py state=present version={{ docker.dockerpy_version }}
+
+- name: install docker-compose
+  pip: name=docker-compose state=present version={{ docker.compose_version }}
