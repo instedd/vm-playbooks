@@ -1,11 +1,27 @@
 - hosts: all
   roles:
+    - network
     - guisso
     - hub
     - nuntium
     - pollit
   vars:
-    local:  { hostname: "local.instedd.org" }
-    guisso: { hostname: "local.instedd.org", port: 8000 }
+    avahi_hostname: instedd
+    avahi_aliases:
+      - pollit.instedd
+      - login.instedd
+      - nuntium.instedd
+      - hub.instedd
+    local:
+      hostname: instedd
+      domainname: local
+    pollit:
+      hostname: pollit.instedd
+    guisso:
+      hostname: login.instedd
+    nuntium:
+      hostname: nuntium.instedd
+    hub:
+      hostname: hub.instedd
 
 
