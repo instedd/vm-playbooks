@@ -1,0 +1,23 @@
+---
+pollit:
+  version: release-2.1
+  hostname: "{{ local.hostname | default('pollit') }}"
+  domainname: "{{ local.domainname | default('local') }}"
+  app_dir: /u/apps/pollit
+
+  guisso:
+    enabled: true
+    url: "{{ guisso.hostname | asurl(guisso.domainname) }}"
+
+  hub:
+    enabled: true
+    url: "{{ hub.hostname | asurl(hub.domainname) }}"
+
+  nuntium:
+    url: "{{ nuntium.hostname | asurl(nuntium.domainname) }}"
+    account_name: pollit
+    account_pass: pollit
+    application: pollit
+    pass: pollit
+    interface_user: pollit
+    interface_pass: pollit

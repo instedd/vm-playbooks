@@ -1,14 +1,15 @@
 ---
 hub:
-  version: 1.0.3-pre3
-  hostname: hub
-  port: 8010
+  version: 1.0.3-pre4
+  hostname: "{{ local.hostname | default('hub') }}"
+  domainname: "{{ local.domainname | default('local') }}"
 
   app_dir: /u/apps/hub
   secret_key_base: 9afab09f4e6157d98fcd75f44b5077f3d68435a9cb051aef9f4c62008534a48eed51a70986f3c3e01d493634b0e1553e805c170ba2d45bc2d93363b2578be6b1
 
   poirot:
     enabled: false
+
   guisso:
     enabled: true
-    url: http://guisso
+    url: "{{ guisso.hostname | asurl(guisso.domainname) }}"
