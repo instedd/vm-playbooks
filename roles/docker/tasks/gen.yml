@@ -10,3 +10,6 @@
 - name: install docker-gen
   unarchive: src=/tmp/docker-gen-linux-amd64-0.4.0.tar.gz dest=/usr/local/bin/ copy=no
   when: not dockergenst.stat.exists
+
+- name: setup templates dir
+  file: state=directory path=/etc/templates/

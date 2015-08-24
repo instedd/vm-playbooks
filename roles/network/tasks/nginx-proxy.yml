@@ -1,19 +1,9 @@
 ---
 
-- name: inspect if proxy container has been defined
-  shell: docker inspect proxy > /dev/null
-  register: inspect
-  failed_when: "inspect.rc > 1 or (inspect.rc == 1 and 'No such image or container' not in inspect.stderr)"
+- name: install nginx
+  apt: name=nginx=1.4.6-1ubuntu3.3 state=present
 
-- name: create proxy container
-  when: "inspect.rc == 1"
-  command: >
-    docker run
-      --name proxy
-      --restart=on-failure:5
-      -p 80:80
-      -v /var/run/docker.sock:/tmp/docker.sock:ro
-      -d jwilder/nginx-proxy
-
-- name: start proxy container
-  command: docker start proxy
+- name: setup template for nginx conf
+  copy: src=nginx.tmpl dest=/etc/templates/
+  changed_when: True
+  notify: rebuild nginx

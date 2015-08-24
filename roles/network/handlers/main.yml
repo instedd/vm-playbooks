@@ -6,6 +6,16 @@
 
 - name: rebuild dnsmasq
   sudo: yes
-  shell: docker-gen -notify="/etc/init.d/dnsmasq force-reload" /etc/dockerhosts.tmpl /etc/dockerhosts
+  shell: docker-gen -notify="/etc/init.d/dnsmasq force-reload" /etc/templates/dockerhosts.tmpl /etc/dockerhosts
+
+- name: rebuild nginx
+  notify: restart nginx
+  shell: docker-gen /etc/templates/nginx.tmpl /etc/nginx/sites-enabled/default
+  sudo: yes
+
+- name: restart nginx
+  service: name=nginx state=restarted enabled=yes
+  sudo: yes
+
 
 

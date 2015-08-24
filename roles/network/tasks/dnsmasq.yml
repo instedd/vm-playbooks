@@ -11,4 +11,4 @@
   template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.d/dnsmasq.conf
 
 - name: setup template for dnsmasq-gen
-  copy: src=dockerhosts.tmpl dest=/etc/
+  copy: src=dockerhosts.tmpl dest=/etc/templates/
