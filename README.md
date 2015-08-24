@@ -1,6 +1,14 @@
 # InSTEDD Ansible Playbooks
 
-**Work in progress.**
+**Work in progress**
+
+## Setup
+
+Install prerequisites running:
+
+```bash
+ansible-galaxy install -r requirements.yml
+```
 
 ## Run
 

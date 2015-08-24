@@ -1,0 +1,3 @@
+- src: https://github.com/pwelch/ansible-avahi
+  version: v2.0.0
+  path: roles/
