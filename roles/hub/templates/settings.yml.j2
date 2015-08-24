@@ -1,8 +1,8 @@
-host: {{ hub.hostname }}
+host: {{ hub.hostname | withdomain(hub.domainname) }}
 authentication_token: secret
 
 poirot:
-  elasticsearch_url: localhost:9200
+  elasticsearch_url: false
 
 {% if hub.google is defined %}
 google:

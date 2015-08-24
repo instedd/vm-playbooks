@@ -2,29 +2,29 @@
 
 web: &defaults
   image: instedd/pollit:{{ pollit.version }}
-  hostname: {{ pollit.hostname }}
+  hostname: "{{ pollit.hostname }}"
+  domainname: {{ pollit.domainname }}
+  dns: "{{ ansible_docker0.ipv4.address }}"
   external_links:
-    - nuntium
-    - hub
-    - guisso
     - mysql
   environment:
     DATABASE_URL: mysql2://root:root@mysql/pollit
+    VIRTUAL_HOST: "{{ pollit.hostname | withdomain(pollit.domainname) }}"
   volumes:
     - 'config/guisso.yml:/app/config/guisso.yml'
     - 'config/settings.yml:/app/config/settings.yml'
     - 'config/nuntium.yml:/app/config/nuntium.yml'
     - 'config/hub.yml:/app/config/hub.yml'
     - 'log:/app/log'
-  ports:
-    - "{{ pollit.port }}:80"
 
 delayed:
   <<: *defaults
+  environment:
+    DATABASE_URL: mysql2://root:root@mysql/pollit
   command: bundle exec rake jobs:work
-  ports: []
 
 hubimport:
   <<: *defaults
+  environment:
+    DATABASE_URL: mysql2://root:root@mysql/pollit
   command: bundle exec rake hub:import
-  ports: []

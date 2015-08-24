@@ -7,12 +7,12 @@
     - "{{ pollit.app_dir }}/log"
 
 - name: register pollit in guisso
-  guisso_register_app: name=pollit host={{pollit.hostname}} trusted=true
+  guisso_register_app: name=pollit host={{ pollit.hostname | withdomain(pollit.domainname) }} trusted=true
   register: pollit_guisso
   when: pollit.guisso.enabled
 
 - name: register pollit in hub
-  hub_register_app: name="Pollit Local" host={{pollit.hostname}} type=PollitConnector
+  hub_register_app: name="Pollit Local" host={{pollit.hostname | withdomain(pollit.domainname) }} type=PollitConnector
   register: pollit_hub
   when: pollit.hub.enabled
 

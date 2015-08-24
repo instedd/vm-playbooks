@@ -10,7 +10,7 @@
     - "{{ nuntium.app_dir }}/rabbitmq/mnesia"
 
 - name: register nuntium in guisso
-  guisso_register_app: name=nuntium host={{nuntium.hostname}} trusted=true
+  guisso_register_app: name=nuntium host="{{ nuntium.hostname | withdomain(nuntium.domainname) }}" trusted=true
   register: nuntium_guisso
   when: nuntium.guisso.enabled
 
@@ -25,18 +25,13 @@
   template: src=docker-compose.yml.j2 dest={{ nuntium.app_dir }}/docker-compose.yml
   register: compose_file
 
-- name: inspect if rabbitmq and memcached containers have been defined
-  shell: docker inspect rabbitmq memcached > /dev/null
-  register: inspect
-  failed_when: "inspect.rc > 1 or (inspect.rc == 1 and 'No such image or container' not in inspect.stderr)"
-
 - name: docker compose up rabbitmq and memcached
   command: docker-compose up -d rabbitmq memcached chdir={{ nuntium.app_dir }}
-  when: "inspect.rc == 1"
+  register: databaseup
 
 - name: waiting 20s for rabbitmq and memcached to start
   pause: seconds=20
-  when: "inspect.rc == 1"
+  when: "'Starting' in databaseup.stderr"
 
 - name: setup rabbitmq vhost
   command: docker exec rabbitmq rabbitmqctl add_vhost {{ nuntium.amqp.vhost }}
@@ -59,6 +54,7 @@
 
 - name: migrate database
   command: docker-compose run --rm -T web bash /app/migrate chdir={{ nuntium.app_dir }}
+  tags: ["migration"]
 
 - name: docker compose up application
   command: docker-compose up --force-recreate --no-deps -d web workerfast workerslow xmpp smpp msn cron sched chdir={{ nuntium.app_dir }}

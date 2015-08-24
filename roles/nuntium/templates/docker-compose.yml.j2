@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 rabbitmq:
   image: rabbitmq:3.5.3
   container_name: rabbitmq
@@ -18,6 +20,9 @@ memcached:
 web:
   image: instedd/nuntium:{{nuntium.version}}
   container_name: nuntium
+  hostname: "{{ nuntium.hostname }}"
+  domainname: "{{ nuntium.domainname }}"
+  dns: "{{ ansible_docker0.ipv4.address }}"
   links: &links
     - rabbitmq
     - memcached
@@ -26,12 +31,14 @@ web:
   environment: &environment
     RAILS_ENV: production
     DATABASE_URL: mysql2://root:root@mysql/nuntium
+    WEB_BIND_URI: unix:///var/run/app.sock
+  environment:
+    <<: *environment
+    VIRTUAL_HOST: "{{ nuntium.hostname | withdomain(nuntium.domainname) }}"
   volumes: &volumes
     - 'config/amqp.yml:/app/config/amqp.yml'
     - 'config/guisso.yml:/app/config/guisso.yml'
     - 'config/settings.yml:/app/config/settings.yml'
-  ports:
-    - {{ nuntium.port }}:80
 
 cron: &service
   image: instedd/nuntium:{{nuntium.version}}
@@ -40,20 +47,15 @@ cron: &service
   environment: *environment
   volumes: *volumes
   command: "bundle exec lib/services/cron_daemon.rb"
+  dns: "{{ ansible_docker0.ipv4.address }}"
 
 workerfast:
   <<: *service
-  environment:
-    <<: *environment
-    INSTANCE_ID: 1000
-  command: "bundle exec lib/services/generic_worker_daemon.rb ${RAILS_ENV} fast ${INSTANCE_ID}"
+  command: "bundle exec lib/services/generic_worker_daemon.rb production fast 1000"
 
 workerslow:
   <<: *service
-  environment:
-    <<: *environment
-    INSTANCE_ID: 2000
-  command: "bundle exec lib/services/generic_worker_daemon.rb ${RAILS_ENV} slow ${INSTANCE_ID}"
+  command: "bundle exec lib/services/generic_worker_daemon.rb production slow 2000"
 
 xmpp:
   <<: *service

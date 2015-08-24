@@ -11,7 +11,7 @@
   template: src=docker-env.j2 dest={{ hub.app_dir }}/.docker-env
 
 - name: register hub in guisso
-  guisso_register_app: name=hub host={{hub.hostname}} trusted=true
+  guisso_register_app: name=hub host={{hub.hostname | withdomain(hub.domainname)}} trusted=true
   register: hub_guisso
   when: hub.guisso.enabled
 
@@ -32,10 +32,15 @@
 
 - name: docker compose up databases
   command: docker-compose up -d db redis chdir={{ hub.app_dir }}
+  register: databaseup
+
+- name: waiting 20s for dbs to start
+  pause: seconds=20
+  when: "'Starting' in databaseup.stderr"
 
 - name: migrate database
   command: docker-compose run --rm -T web bash /app/migrate chdir={{ hub.app_dir }}
   tags: ["migration"]
 
 - name: docker compose up application
-  command: docker-compose up --force-recreate -d chdir={{ hub.app_dir }}
+  command: docker-compose up --force-recreate --no-deps -d web resque resquescheduler chdir={{ hub.app_dir }}

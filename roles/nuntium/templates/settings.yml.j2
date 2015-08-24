@@ -1,4 +1,4 @@
 production:
   protocol: http
-  host_name: {{ nuntium.hostname }}
+  host_name: {{ nuntium.hostname | withdomain(nuntium.domainname) }}
   email_sender: nuntium@instedd.org

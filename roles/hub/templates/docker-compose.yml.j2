@@ -13,46 +13,35 @@ redis:
 web:
   image: instedd/hub:{{ hub.version }}
   container_name: hub
-  links:
+  hostname: "{{ hub.hostname }}"
+  domainname: "{{ hub.domainname }}"
+  links: &links
     - db
     - redis
   env_file: .docker-env
-  volumes:
+  dns: "{{ ansible_docker0.ipv4.address }}"
+  environment:
+    VIRTUAL_HOST: "{{ hub.hostname | withdomain(hub.domainname) }}"
+  volumes: &volumes
     - 'config/guisso.yml:/app/config/guisso.yml'
     - 'config/database.yml:/app/config/database.yml'
     - 'config/poirot.yml:/app/config/poirot.yml'
     - 'config/secrets.yml:/app/config/secrets.yml'
     - 'config/settings.yml:/app/config/settings.local.yml'
     - 'log:/app/log'
-  ports:
-    - {{ hub.port }}:80
 
 resque:
   image: instedd/hub:{{ hub.version }}
-  links:
-    - db
-    - redis
-  volumes:
-    - 'config/guisso.yml:/app/config/guisso.yml'
-    - 'config/database.yml:/app/config/database.yml'
-    - 'config/poirot.yml:/app/config/poirot.yml'
-    - 'config/secrets.yml:/app/config/secrets.yml'
-    - 'config/settings.yml:/app/config/settings.local.yml'
-    - 'log:/app/log'
+  links: *links
+  volumes: *volumes
   command: rake resque:work QUEUE=hub TERM_CHILD=1 FORK_PER_JOB=false
   env_file: .docker-env
+  dns: "{{ ansible_docker0.ipv4.address }}"
 
 resquescheduler:
   image: instedd/hub:{{ hub.version }}
-  links:
-    - db
-    - redis
-  volumes:
-    - 'config/guisso.yml:/app/config/guisso.yml'
-    - 'config/database.yml:/app/config/database.yml'
-    - 'config/poirot.yml:/app/config/poirot.yml'
-    - 'config/secrets.yml:/app/config/secrets.yml'
-    - 'config/settings.yml:/app/config/settings.local.yml'
-    - 'log:/app/log'
+  links: *links
+  volumes: *volumes
   command: rake resque:scheduler
   env_file: .docker-env
+  dns: "{{ ansible_docker0.ipv4.address }}"
