@@ -1,0 +1,19 @@
+---
+
+- name: inspect if proxy container has been defined
+  shell: docker inspect proxy > /dev/null
+  register: inspect
+  failed_when: "inspect.rc > 1 or (inspect.rc == 1 and 'No such image or container' not in inspect.stderr)"
+
+- name: create proxy container
+  when: "inspect.rc == 1"
+  command: >
+    docker run
+      --name proxy
+      --restart=on-failure:5
+      -p 80:80
+      -v /var/run/docker.sock:/tmp/docker.sock:ro
+      -d jwilder/nginx-proxy
+
+- name: start proxy container
+  command: docker start proxy

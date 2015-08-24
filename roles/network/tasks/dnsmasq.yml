@@ -1,0 +1,14 @@
+---
+
+- name: install dnsmasq
+  apt: name=dnsmasq=2.68-1ubuntu0.1 state=present
+
+- name: create empty dockerhosts file
+  file: path=/etc/dockerhosts state=touch
+  notify: rebuild dnsmasq
+
+- name: config dnsmasq
+  template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.d/dnsmasq.conf
+
+- name: setup template for dnsmasq-gen
+  copy: src=dockerhosts.tmpl dest=/etc/

@@ -1,0 +1,21 @@
+---
+
+- name: install python packages for avahi aliases
+  apt: pkg={{ item }} state=present
+  with_items:
+    - python-avahi
+    - python-pip
+
+- name: install avahi aliases python package
+  shell: cmd='pip install git+git://github.com/till/avahi-aliases.git@topics/make-it-run' creates='/etc/avahi/aliases'
+
+- name: create avahi aliases file
+  template:
+    src: aliases-default.j2
+    dest: "/etc/avahi/aliases.d/default"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart avahi-daemon
+    - restart avahi-aliases

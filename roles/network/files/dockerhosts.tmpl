@@ -1,0 +1,4 @@
+{{ range $index, $value := $ }}{{ $addrLen := len $value.Addresses }}{{ if gt $addrLen 0 }}{{ with $address := index $value.Addresses 0 }}{{ if $value.Env.VIRTUAL_HOST }}
+# {{ $value.Name }}
+{{ $address.IP }} {{ $value.Env.VIRTUAL_HOST }}
+{{ end }}{{ end }}{{ end }}{{ end }}

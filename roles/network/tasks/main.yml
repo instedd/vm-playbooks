@@ -1,0 +1,5 @@
+---
+
+- include: avahi-aliases.yml
+- include: nginx-proxy.yml
+- include: dnsmasq.yml

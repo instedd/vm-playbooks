@@ -1,0 +1,11 @@
+---
+
+- name: restart avahi-aliases
+  service: name=avahi-aliases state=restarted enabled=yes
+  sudo: yes
+
+- name: rebuild dnsmasq
+  sudo: yes
+  shell: docker-gen -notify="/etc/init.d/dnsmasq force-reload" /etc/dockerhosts.tmpl /etc/dockerhosts
+
+
