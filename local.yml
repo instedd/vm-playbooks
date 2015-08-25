@@ -1,0 +1,29 @@
+- hosts: localhost
+  roles:
+    - ansible-pull
+    - network
+    - guisso
+    - hub
+    - nuntium
+    - pollit
+
+  vars:
+    avahi_hostname: instedd
+    avahi_aliases:
+      - pollit.instedd
+      - login.instedd
+      - nuntium.instedd
+      - hub.instedd
+    local:
+      hostname: instedd
+      domainname: local
+    pollit:
+      hostname: pollit.instedd
+    guisso:
+      hostname: login.instedd
+    nuntium:
+      hostname: nuntium.instedd
+    hub:
+      hostname: hub.instedd
+
+

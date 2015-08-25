@@ -1,0 +1,10 @@
+---
+
+- name: install ansible
+  apt: name=ansible=1.5.4+dfsg-1 state=present
+
+- name: setup hosts file in target machine
+  copy: src=hosts dest=/etc/ansible/hosts
+
+- name: setup ansible pull script for this repository
+  template: src=pull.j2 dest=/usr/local/bin/instedd-upgrade mode=u=rwx,go=rx
