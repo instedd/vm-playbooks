@@ -1,7 +1,12 @@
 ---
 
+- name: add ansible repository
+  apt_repository:
+    repo: 'ppa:ansible/ansible'
+    update_cache: yes
+
 - name: install ansible
-  apt: name=ansible=1.5.4+dfsg-1 state=present
+  apt: name=ansible=1.9.2-1ppa~trusty state=present
 
 - name: setup hosts file in target machine
   copy: src=hosts dest=/etc/ansible/hosts
