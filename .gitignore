@@ -1,4 +1,2 @@
 .vagrant
 *.pyc
-
-roles/ansible-avahi
