@@ -11,7 +11,6 @@ Other pending tasks:
 - Schedule backups
 - Cleanup docker images
 - Upgrading apps to newer version
-- Ansible pull from target host
 - Vault for secrets
 - Set guisso and hub registrations as host facts
 - Move these tasks to issues
