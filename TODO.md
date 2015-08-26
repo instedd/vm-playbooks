@@ -2,10 +2,6 @@
 
 Pending tasks:
 
-- Monitor services and restart them on host reboot
-
-Other pending tasks:
-
 - Poirot receiver
 - Poirot elasticsearch
 - Schedule backups

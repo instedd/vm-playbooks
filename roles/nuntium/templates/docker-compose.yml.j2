@@ -2,6 +2,7 @@
 
 rabbitmq:
   image: rabbitmq:3.5.3
+  restart: "{{ docker.restart_policy }}"
   container_name: rabbitmq
   hostname: rabbitmq
   environment:
@@ -15,10 +16,12 @@ rabbitmq:
 
 memcached:
   image: memcached:1.4.24
+  restart: "{{ docker.restart_policy }}"
   container_name: memcached
 
 web:
   image: instedd/nuntium:{{nuntium.version}}
+  restart: "{{ docker.restart_policy }}"
   container_name: nuntium
   hostname: "{{ nuntium.hostname }}"
   domainname: "{{ nuntium.domainname }}"
@@ -42,6 +45,7 @@ web:
 
 cron: &service
   image: instedd/nuntium:{{nuntium.version}}
+  restart: "{{ docker.restart_policy }}"
   links: *links
   external_links: *external_links
   environment: *environment

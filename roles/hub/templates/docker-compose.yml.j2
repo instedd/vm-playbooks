@@ -2,6 +2,7 @@
 
 db:
   image: postgres:9.3.5
+  restart: "{{ docker.restart_policy }}"
   environment:
     - PGDATA=/var/lib/postgresql/data/pgdata
   volumes:
@@ -9,9 +10,11 @@ db:
 
 redis:
   image: redis:2.8.21
+  restart: "{{ docker.restart_policy }}"
 
 web:
   image: instedd/hub:{{ hub.version }}
+  restart: "{{ docker.restart_policy }}"
   container_name: hub
   hostname: "{{ hub.hostname }}"
   domainname: "{{ hub.domainname }}"
@@ -32,6 +35,7 @@ web:
 
 resque:
   image: instedd/hub:{{ hub.version }}
+  restart: "{{ docker.restart_policy }}"
   links: *links
   volumes: *volumes
   command: rake resque:work QUEUE=hub TERM_CHILD=1 FORK_PER_JOB=false
@@ -40,6 +44,7 @@ resque:
 
 resquescheduler:
   image: instedd/hub:{{ hub.version }}
+  restart: "{{ docker.restart_policy }}"
   links: *links
   volumes: *volumes
   command: rake resque:scheduler

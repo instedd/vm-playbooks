@@ -2,6 +2,7 @@
 
 web: &defaults
   image: instedd/pollit:{{ pollit.version }}
+  restart: "{{ docker.restart_policy }}"
   hostname: "{{ pollit.hostname }}"
   domainname: {{ pollit.domainname }}
   dns: "{{ ansible_docker0.ipv4.address }}"

@@ -10,7 +10,7 @@
 - name: create mysql container
   when: "inspect.rc == 1"
   command: >
-    docker run --name mysql --restart=on-failure:5
+    docker run --name mysql --restart={{ docker.restart_policy }}
       -e MYSQL_ROOT_PASSWORD={{ mysql.root_password }}
       -v {{ mysql.data_dir }}:/var/lib/mysql
       -d mysql:{{ mysql.version }}

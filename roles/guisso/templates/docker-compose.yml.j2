@@ -11,6 +11,7 @@ web:
     RAILS_CONFIG__action_mailer__smtp_settings__address: smtp
     VIRTUAL_HOST: "{{ guisso.hostname | withdomain(guisso.domainname) }}"
   dns: "{{ ansible_docker0.ipv4.address }}"
+  restart: "{{ docker.restart_policy }}"
   external_links:
     - mysql:db
   volumes:
