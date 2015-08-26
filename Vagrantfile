@@ -6,8 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "ubuntu/trusty64"
-  config.vm.hostname = "playbooks.local"
-  config.vm.network :private_network, type: :dhcp
+  config.vm.hostname = "instedd.local"
+  config.vm.network "public_network"
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "4096"]
