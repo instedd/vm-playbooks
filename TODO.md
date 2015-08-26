@@ -2,8 +2,6 @@
 
 Pending tasks:
 
-- Configure mailers
-- Log rotate for docker and apps
 - Monitor services and restart them on host reboot
 
 Other pending tasks:

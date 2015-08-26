@@ -2,3 +2,7 @@
 dependencies:
   - role: docker
   - role: mysql
+  - role: logrotate
+    app: nuntium
+    path: "{{ nuntium.app_dir }}/log/*.log"
+

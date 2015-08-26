@@ -1,3 +1,7 @@
 ---
 dependencies:
   - role: docker
+  - role: logrotate
+    app: hub
+    path: "{{ hub.app_dir }}/log/*.log"
+

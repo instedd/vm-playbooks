@@ -10,3 +10,5 @@
 - name: install docker
   apt: name=lxc-docker={{ docker.package_version }} state=present
 
+- name: configure logrotate
+  copy: src=logrotate dest=/etc/logrotate.d/docker

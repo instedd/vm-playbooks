@@ -2,3 +2,6 @@
 dependencies:
   - role: docker
   - role: mysql
+  - role: logrotate
+    app: pollit
+    path: "{{ pollit.app_dir }}/log/*.log"

@@ -1,0 +1,8 @@
+---
+
+- name: install logrotate
+  apt: name=logrotate state=present
+  when: logrotate.install
+
+- name: configure app
+  template: src=logrotateapp.conf.j2 dest=/etc/logrotate.d/{{app}}
