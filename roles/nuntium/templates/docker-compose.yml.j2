@@ -38,6 +38,7 @@ web:
   environment:
     <<: *environment
     VIRTUAL_HOST: "{{ nuntium.hostname | withdomain(nuntium.domainname) }}"
+    DEFAULT_VIRTUAL_HOST: true
   volumes: &volumes
     - 'config/amqp.yml:/app/config/amqp.yml'
     - 'config/guisso.yml:/app/config/guisso.yml'
