@@ -23,6 +23,8 @@
     url={{pollit.nuntium.url}}
     account_name={{pollit.nuntium.account_name}}
     account_pass={{pollit.nuntium.account_pass}}
+    interface=http_post_callback
+    interface_url={{pollit.hostname | asurl(pollit.domainname) }}/nuntium/receive_at
     interface_user={{pollit.nuntium.interface_user}}
     interface_pass={{pollit.nuntium.interface_pass}}
   register: pollit_nuntium
@@ -41,6 +43,7 @@
 
 - name: migrate database
   command: docker-compose run --rm -T web bash /app/migrate chdir={{ pollit.app_dir }}
+  tags: ["migration"]
 
 - name: docker compose up application
   command: docker-compose up --force-recreate -d chdir={{ pollit.app_dir }}

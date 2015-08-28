@@ -13,6 +13,7 @@ def main():
       interface      = dict(default='rss', choices=['rss', 'qst_client', 'http_get_callback', 'http_post_callback']),
       interface_user = dict(default=''),
       interface_pass = dict(default=''),
+      interface_url =  dict(default=''),
       nuntium_dir    = dict(default='/u/apps/nuntium')
     )
   )
@@ -26,7 +27,8 @@ def main():
          "-e NUNTIUM_APP_INTERFACE={} "
          "-e NUNTIUM_APP_INTERFACE_USER={} "
          "-e NUNTIUM_APP_INTERFACE_PASS={} "
-         "web rake clients:register").format(*[module.params[p] for p in ['url', 'account_name', 'account_pass', 'name', 'password', 'interface', 'interface_user', 'interface_pass']])
+         "-e NUNTIUM_APP_INTERFACE_URL={} "
+         "web rake clients:register").format(*[module.params[p] for p in ['url', 'account_name', 'account_pass', 'name', 'password', 'interface', 'interface_user', 'interface_pass', 'interface_url']])
 
   rc, out, err = module.run_command(cmd, cwd=module.params['nuntium_dir'])
 
