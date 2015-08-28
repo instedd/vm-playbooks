@@ -1,6 +1,6 @@
 ---
 nuntium:
-  version: 1.5
+  version: "1.5.1"
   hostname: "{{ local.hostname | default('nuntium') }}"
   domainname: "{{ local.domainname | default('local') }}"
   app_dir: /u/apps/nuntium
