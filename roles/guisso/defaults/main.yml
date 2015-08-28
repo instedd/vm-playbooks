@@ -8,7 +8,7 @@ guisso:
   app_dir: /u/apps/guisso
 
   whitelisted_hosts:
-    - "{{ local.hostname }}"
+    - "{{ local.domainname }}"
 
   secret_token: 761441dde2e62f3bedf59863479e6993c46291c14b25adc9c5dd6ccf9048e0701f0637a4031c460766061b40a89d0987c09b4aa6fd0e3dfbd58b6ec5de8a515f
   devise_secret_key: 3d99622bafabc54479306013ae0777e4aaa3b007fe2680b8a5b3ed1974a0b4643553fcd83667c767d876218ff62457b00c0976aeece754999b951370ffd094a8
