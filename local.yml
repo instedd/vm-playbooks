@@ -6,7 +6,6 @@
     - hub
     - nuntium
     - pollit
-
   vars:
     avahi_hostname: instedd
     avahi_aliases:
@@ -19,11 +18,15 @@
       domainname: local
     pollit:
       hostname: pollit.instedd
+      domainname: local
     guisso:
       hostname: login.instedd
+      domainname: local
     nuntium:
       hostname: nuntium.instedd
+      domainname: local
     hub:
       hostname: hub.instedd
+      domainname: local
 
 
