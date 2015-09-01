@@ -3,3 +3,5 @@
 - include: avahi-aliases.yml
 - include: nginx-proxy.yml
 - include: dnsmasq.yml
+- include: ip-banner.yml
+- include: ip-config.yml

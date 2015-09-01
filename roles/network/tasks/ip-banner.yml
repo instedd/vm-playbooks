@@ -1,0 +1,12 @@
+---
+
+- name: copy get-ip-address script
+  copy: src=get-ip-address dest=/usr/local/bin/get-ip-address mode=u+rwx,go=rx
+
+- name: set up show-ip-address script
+  copy: src=show-ip-address dest=/etc/network/if-up.d/show-ip-address mode=u+rwx,go=rx
+  notify: update issue
+
+- name: show banner in ssh login
+  lineinfile: "dest=/etc/ssh/sshd_config regexp='^#?Banner' line='Banner /etc/issue'"
+  notify: reload sshd

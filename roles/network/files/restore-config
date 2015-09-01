@@ -1,0 +1,6 @@
+echo "Restoring interfaces configuration"
+sudo cp /etc/network/interfaces.bak /etc/network/interfaces
+
+echo "Restarting network interface"
+sudo ifdown eth1; sudo ifup eth1
+sudo ifdown eth1; sudo ifup eth1

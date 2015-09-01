@@ -1,0 +1,1 @@
+ /sbin/ifconfig | grep -A1 "eth1 " | grep inet | awk '{ print $2 }' | awk -F: '{ print $2 }'

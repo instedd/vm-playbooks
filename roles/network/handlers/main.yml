@@ -17,5 +17,9 @@
   service: name=nginx state=restarted enabled=yes
   sudo: yes
 
+- name: reload sshd
+  service: name=ssh state=reloaded
+  sudo: yes
 
-
+- name: update issue
+  shell: MODE=start /etc/network/if-up.d/show-ip-address

@@ -1,0 +1,25 @@
+---
+
+- name: get python-dev
+  apt: name=python-dev state=present
+
+- name: get setuptools
+  apt: name=python-setuptools state=present
+
+- name: make sure pip works
+  shell: easy_install -U pip creates=/usr/local/bin/pip
+
+- name: install dependencies for config script
+  pip: name={{ item }}
+  with_items:
+    - netaddr
+    - netifaces
+
+- name: copy ip config script
+  copy: src=config.py dest=/usr/local/bin/instedd-config mode=u+rwx,go=rx
+
+- name: backup interfaces file
+  command: creates=/etc/network/interfaces.bak cp /etc/network/interfaces /etc/network/interfaces.bak
+
+- name: script for restoring interfaces file
+  copy: dest=/usr/local/bin/instedd-restore mode=u+rwx,go=rx src=restore-config
