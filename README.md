@@ -8,14 +8,6 @@ This project is work in progress. See `TODO.md` for pending issues. The current 
 
 All applications are run as docker containers. Services are exposed to the host using avahi and proxied via an nginx, and internal discovery is handled with dnsmasq.
 
-## Setup
-
-Install prerequisites running:
-
-```bash
-ansible-galaxy install -r requirements.yml
-```
-
 ## Run
 
 To deploy the `main.yml` playbook on a Vagrant machine, run:
