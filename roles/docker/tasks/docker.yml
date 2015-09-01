@@ -1,14 +1,22 @@
 ---
-- name: add docker repository key
-  apt_key: url="https://get.docker.io/gpg" id="A88D21E9"
+# - name: add docker repository key
+#   apt_key: url="https://get.docker.io/gpg" id="A88D21E9" validate_certs=no
+#   shell: "curl -sSL https://get.docker.com/gpg | apt-key add - && apt-key update"
+#   shell: "wget -qO - https://get.docker.io/gpg | sudo apt-key add -"
 
-- name: add docker repository
-  apt_repository:
-    repo: 'deb https://get.docker.io/ubuntu docker main'
-    update_cache: yes
+# - name: add docker repository
+#   apt_repository:
+#     repo: 'deb https://get.docker.io/ubuntu docker main'
+#     update_cache: yes
+
+# - name: install docker
+#   apt: name=lxc-docker={{ docker.package_version }} state=present
 
 - name: install docker
-  apt: name=lxc-docker={{ docker.package_version }} state=present
+  shell: curl -sSL https://get.docker.com/ | sh creates=/usr/bin/docker
+
+- name: reload facts
+  action: setup
 
 - name: configure logrotate
   copy: src=logrotate dest=/etc/logrotate.d/docker
