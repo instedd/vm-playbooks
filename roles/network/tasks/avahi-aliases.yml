@@ -7,7 +7,10 @@
     - python-pip
 
 - name: install avahi aliases python package
-  shell: cmd='pip install git+git://github.com/till/avahi-aliases.git@topics/make-it-run' creates='/etc/avahi/aliases'
+  shell: cmd='pip install git+git://github.com/till/avahi-aliases.git@topics/make-it-run' creates='/etc/avahi/aliases.d/default'
+
+- name: create avahi aliases folder
+  file: path="/etc/avahi/aliases.d" state=directory
 
 - name: create avahi aliases file
   template:
