@@ -4,13 +4,12 @@
   service: name=avahi-aliases state=restarted enabled=yes
   sudo: yes
 
-- name: rebuild dnsmasq
+- name: restart docker-gen-dnsmasq
+  service: name=docker-gen-dnsmasq state=restarted enabled=yes
   sudo: yes
-  shell: docker-gen -notify="/etc/init.d/dnsmasq force-reload" /etc/templates/dockerhosts.tmpl /etc/dockerhosts
 
-- name: rebuild nginx
-  notify: restart nginx
-  shell: docker-gen /etc/templates/nginx.tmpl /etc/nginx/sites-enabled/default
+- name: restart docker-gen-nginx
+  service: name=docker-gen-nginx state=restarted enabled=yes
   sudo: yes
 
 - name: restart nginx
