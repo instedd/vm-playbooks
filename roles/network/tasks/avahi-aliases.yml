@@ -6,9 +6,6 @@
     - python-avahi
     - python-pip
 
-- name: install avahi aliases python package
-  shell: cmd='pip install git+git://github.com/till/avahi-aliases.git@topics/make-it-run' creates='/etc/avahi/aliases.d/default'
-
 - name: create avahi aliases folder
   file: path="/etc/avahi/aliases.d" state=directory
 
@@ -19,6 +16,12 @@
     owner: root
     group: root
     mode: 0644
+  notify:
+    - restart avahi-daemon
+    - restart avahi-aliases
+
+- name: install avahi aliases python package
+  shell: pip install git+git://github.com/till/avahi-aliases.git@topics/make-it-run creates='/etc/init/avahi-aliases.conf'
   notify:
     - restart avahi-daemon
     - restart avahi-aliases
