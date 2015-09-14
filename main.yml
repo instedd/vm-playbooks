@@ -5,6 +5,7 @@
     - guisso
     - hub
     - nuntium
+    - theme
     - pollit
   vars:
     avahi_hostname: instedd
@@ -13,6 +14,7 @@
       - login.instedd
       - nuntium.instedd
       - hub.instedd
+      - theme.instedd
     local:
       hostname: instedd
       domainname: local

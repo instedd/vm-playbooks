@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+theme:
+  name: theme
+  image: instedd/platform-common:{{ theme.version }}
+  restart: "{{ docker.restart_policy }}"
+  hostname: "{{ theme.hostname }}"
+  domainname: {{ theme.domainname }}
+  environment:
+    VIRTUAL_HOST: "{{ theme.hostname | withdomain(theme.domainname) }}"

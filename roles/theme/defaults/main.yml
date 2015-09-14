@@ -1,0 +1,6 @@
+---
+theme:
+  version: 'latest'
+  hostname: "{{ local.hostname | default('theme.instedd') }}"
+  domainname: "{{ local.domainname | default('local') }}"
+  app_dir: /u/apps/platform-common

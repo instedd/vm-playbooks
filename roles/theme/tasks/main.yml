@@ -1,0 +1,9 @@
+---
+- name: create platform common folders
+  file: path={{ theme.app_dir }} state=directory
+
+- name: create platform common docker compose file
+  template: src=docker-compose.yml.j2 dest={{ theme.app_dir }}/docker-compose.yml
+
+- name: docker compose up application
+  command: docker-compose up --force-recreate -d chdir={{ theme.app_dir }}

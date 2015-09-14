@@ -13,6 +13,9 @@ pollit:
     enabled: true
     url: "{{ hub.hostname | asurl(hub.domainname) }}"
 
+  theme:
+    url: "{{ theme.hostname | asurl(theme.domainname) | default('http://theme.instedd.org/') }}"
+
   nuntium:
     url: "{{ nuntium.hostname | asurl(nuntium.domainname) }}"
     account_name: pollit
