@@ -1,7 +1,7 @@
 ---
 guisso:
   version: "release-1.0.1"
-  hostname: "{{ local.hostname | default('guisso') }}"
+  hostname: "{{ local.hostname | default('login.instedd') }}"
   domainname: "{{ local.domainname | default('local') }}"
 
   email_sender: noreply@local.instedd.org

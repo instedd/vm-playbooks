@@ -1,7 +1,7 @@
 ---
 hub:
   version: 1.0.3-pre4
-  hostname: "{{ local.hostname | default('hub') }}"
+  hostname: "{{ local.hostname | default('hub.instedd') }}"
   domainname: "{{ local.domainname | default('local') }}"
 
   app_dir: /u/apps/hub

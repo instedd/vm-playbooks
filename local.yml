@@ -16,7 +16,6 @@
       - hub.instedd
       - theme.instedd
     local:
-      hostname: instedd
       domainname: local
     pollit:
       hostname: pollit.instedd
