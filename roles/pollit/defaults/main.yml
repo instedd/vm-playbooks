@@ -1,7 +1,7 @@
 ---
 pollit:
-  version: release-2.1
   hostname: "{{ local.hostname | default('pollit') }}"
+  version: "2.1.1"
   domainname: "{{ local.domainname | default('local') }}"
   app_dir: /u/apps/pollit
 
