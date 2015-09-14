@@ -43,7 +43,7 @@
   register: docker_exec_result
   failed_when: "docker_exec_result.rc not in [0,2]"
 
-- name: set rabbimtq user password
+- name: set rabbitmq user password
   command: docker exec rabbitmq rabbitmqctl change_password {{ nuntium.amqp.user }} {{ nuntium.amqp.pass }}
   when: "docker_exec_result.rc == 2"
 
