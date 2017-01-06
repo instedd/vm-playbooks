@@ -1,16 +1,15 @@
 - hosts: all
   roles:
-    - ansible-pull
-    - network
+    # - ansible-pull
+    # - network
+    - mysql
     - guisso
     - hub
     - nuntium
     - theme
-    - pollit
   vars:
     avahi_hostname: instedd
     avahi_aliases:
-      - pollit.instedd
       - login.instedd
       - nuntium.instedd
       - hub.instedd

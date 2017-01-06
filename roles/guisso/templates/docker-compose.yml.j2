@@ -7,13 +7,11 @@ web:
   domainname: "{{ guisso.domainname }}"
   environment:
     RAILS_ENV: production
-    DATABASE_URL: mysql2://root:{{mysql.root_password}}@db/guisso
+    DATABASE_URL: mysql2://root:{{ mysql.root_password }}@{{ ansible_docker0.ipv4.address }}/guisso
     RAILS_CONFIG__action_mailer__smtp_settings__address: smtp
     VIRTUAL_HOST: "{{ guisso.hostname | withdomain(guisso.domainname) }}"
   dns: "{{ ansible_docker0.ipv4.address }}"
   restart: "{{ docker.restart_policy }}"
-  external_links:
-    - mysql:db
   volumes:
     - 'config/settings.yml:/app/config/settings.yml'
     - 'log:/app/log'

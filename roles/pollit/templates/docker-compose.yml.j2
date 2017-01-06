@@ -6,10 +6,8 @@ web: &defaults
   hostname: "{{ pollit.hostname }}"
   domainname: {{ pollit.domainname }}
   dns: "{{ ansible_docker0.ipv4.address }}"
-  external_links:
-    - mysql
   environment:
-    DATABASE_URL: mysql2://root:root@mysql/pollit
+    DATABASE_URL: mysql2://root:root@{{ ansible_docker0.ipv4.address }}/pollit
     VIRTUAL_HOST: "{{ pollit.hostname | withdomain(pollit.domainname) }}"
   volumes:
     - 'config/guisso.yml:/app/config/guisso.yml'
@@ -21,11 +19,11 @@ web: &defaults
 delayed:
   <<: *defaults
   environment:
-    DATABASE_URL: mysql2://root:root@mysql/pollit
+    DATABASE_URL: mysql2://root:root@{{ ansible_docker0.ipv4.address }}/pollit
   command: bundle exec rake jobs:work
 
 hubimport:
   <<: *defaults
   environment:
-    DATABASE_URL: mysql2://root:root@mysql/pollit
+    DATABASE_URL: mysql2://root:root@{{ ansible_docker0.ipv4.address }}/pollit
   command: bundle exec rake hub:import

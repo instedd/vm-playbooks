@@ -29,11 +29,9 @@ web:
   links: &links
     - rabbitmq
     - memcached
-  external_links: &external_links
-    - mysql
   environment: &environment
     RAILS_ENV: production
-    DATABASE_URL: mysql2://root:root@mysql/nuntium
+    DATABASE_URL: mysql2://root:root@{{ ansible_docker0.ipv4.address }}/nuntium
     WEB_BIND_URI: unix:///var/run/app.sock
   environment:
     <<: *environment
@@ -49,7 +47,6 @@ cron: &service
   image: instedd/nuntium:{{nuntium.version}}
   restart: "{{ docker.restart_policy }}"
   links: *links
-  external_links: *external_links
   environment: *environment
   volumes: *volumes
   command: "bundle exec lib/services/cron_daemon.rb"

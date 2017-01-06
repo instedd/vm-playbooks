@@ -1,23 +1,21 @@
 ---
-- name: create data folder
-  file: path={{ mysql.data_dir }} state=directory
+- name: install mysql packages
+  apt: name={{ item }} state=present
+  with_items:
+    - mysql-server-5.6
+    - mysql-client-5.6
+  register: install_mysql
 
-- name: inspect if mysql container has been defined
-  shell: docker inspect mysql > /dev/null
-  register: inspect
-  failed_when: "inspect.rc > 1 or (inspect.rc == 1 and 'No such image or container' not in inspect.stderr)"
+- name: set root password
+  command: /usr/bin/mysqladmin -u root password {{ mysql.root_password }}
+  when: install_mysql.changed
 
-- name: create mysql container
-  when: "inspect.rc == 1"
-  command: >
-    docker run --name mysql --restart={{ docker.restart_policy }}
-      -e MYSQL_ROOT_PASSWORD={{ mysql.root_password }}
-      -v {{ mysql.data_dir }}:/var/lib/mysql
-      -d mysql:{{ mysql.version }}
+- name: bind mysql to docker interface
+  template: src=mysql.cnf.j2 dest=/etc/mysql/conf.d/bind.cnf owner=root mode=0644
+  notify: restart mysql
 
-- name: start mysql container
-  command: docker start mysql
-
-- name: waiting 10s for mysql to start
-  pause: seconds=10
-  when: "inspect.rc == 1"
+- name: grant mysql privileges
+  command: /usr/bin/mysql -u root --password={{ mysql.root_password }} -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'{{ item }}' IDENTIFIED BY '{{ mysql.root_password }}' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+  with_items:
+    - "{{ ansible_eth0.ipv4.address }}"
+    - "{{ ansible_docker0.ipv4.network }}/{{ ansible_docker0.ipv4.netmask }}"

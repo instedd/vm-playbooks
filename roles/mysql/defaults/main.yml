@@ -1,5 +1,2 @@
----
 mysql:
-  version: '5.6'
-  data_dir: '/data/mysql'
-  root_password: 'root'
+  root_password: root

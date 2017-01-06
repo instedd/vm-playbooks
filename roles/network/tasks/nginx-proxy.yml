@@ -1,7 +1,7 @@
 ---
 
 - name: install nginx
-  apt: name=nginx=1.4.6-1ubuntu3.3 state=present
+  apt: name=nginx state=present
 
 - name: setup template for nginx conf
   copy: src=nginx.tmpl dest=/etc/templates/

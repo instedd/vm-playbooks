@@ -6,6 +6,9 @@
 - name: create empty dockerhosts file
   file: path=/etc/dockerhosts state=touch
 
+- name: add extra hosts file
+  template: src=extrahosts.j2 dest=/etc/extrahosts
+
 - name: config dnsmasq
   template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.d/dnsmasq.conf
 
@@ -15,4 +18,3 @@
 - name: register service for docker-gen
   copy: src=docker-gen-dnsmasq.conf dest=/etc/init/ mode=0644
   notify: restart docker-gen-dnsmasq
-

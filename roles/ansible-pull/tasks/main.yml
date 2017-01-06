@@ -6,7 +6,7 @@
     update_cache: yes
 
 - name: install ansible
-  apt: name=ansible=1.9.2-1ppa~trusty state=present
+  apt: name=ansible state=present
 
 - name: setup hosts file in target machine
   copy: src=hosts dest=/etc/ansible/hosts

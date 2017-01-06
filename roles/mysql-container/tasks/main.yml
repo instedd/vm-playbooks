@@ -1,0 +1,23 @@
+---
+- name: create data folder
+  file: path={{ mysql.data_dir }} state=directory
+
+- name: inspect if mysql container has been defined
+  shell: docker inspect mysql > /dev/null
+  register: inspect
+  failed_when: "inspect.rc > 1 or (inspect.rc == 1 and 'No such image or container' not in inspect.stderr)"
+
+- name: create mysql container
+  when: "inspect.rc == 1"
+  command: >
+    docker run --name mysql --restart={{ docker.restart_policy }}
+      -e MYSQL_ROOT_PASSWORD={{ mysql.root_password }}
+      -v {{ mysql.data_dir }}:/var/lib/mysql
+      -d mysql:{{ mysql.version }}
+
+- name: start mysql container
+  command: docker start mysql
+
+- name: waiting 10s for mysql to start
+  pause: seconds=10
+  when: "inspect.rc == 1"
