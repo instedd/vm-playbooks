@@ -1,0 +1,23 @@
+---
+- name: create ask folders
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ ask.app_dir }}"
+
+- name: register ask in guisso
+  guisso_register_app: name=ask host={{ ask.hostname | withdomain(ask.domainname) }} trusted=true
+  register: ask_guisso
+
+- name: create ask docker compose file
+  template: src=docker-compose.yml.j2 dest={{ ask.app_dir }}/docker-compose.yml
+  register: compose_file
+
+- name: create ask database if not exists
+  command: /usr/bin/mysql -u root --password={{ mysql.root_password }} -e "CREATE DATABASE IF NOT EXISTS ask;"
+
+- name: migrate ask database
+  command: docker-compose run --rm -T app mix ecto.migrate chdir={{ ask.app_dir }}
+  tags: ["migration"]
+
+- name: docker compose up application
+  command: docker-compose up --force-recreate -d chdir={{ ask.app_dir }}

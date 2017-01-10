@@ -1,0 +1,38 @@
+---
+- name: create verboice folders
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ verboice.app_dir }}"
+    - "{{ verboice.app_dir }}/config"
+    - "{{ verboice.app_dir }}/log"
+
+- name: register verboice in guisso
+  guisso_register_app: name=verboice host={{ verboice.hostname | withdomain(verboice.domainname) }} trusted=true
+  register: verboice_guisso
+  when: verboice.guisso.enabled
+
+- name: register verboice in hub
+  hub_register_app: name="Verboice Local" host={{verboice.hostname | withdomain(verboice.domainname) }} type=VerboiceConnector
+  register: verboice_hub
+  when: verboice.hub.enabled
+
+- name: create verboice config files
+  template: src={{ item }}.j2 dest={{ verboice.app_dir }}/config/{{item}}
+  with_items:
+    - guisso.yml
+    - verboice.yml
+    - hub.yml
+    - credentials.yml
+    - poirot.yml
+    - verboice.config
+
+- name: create verboice docker compose file
+  template: src=docker-compose.yml.j2 dest={{ verboice.app_dir }}/docker-compose.yml
+  register: compose_file
+
+- name: migrate database
+  command: docker-compose run --rm -T web bash /app/migrate chdir={{ verboice.app_dir }}
+  tags: ["migration"]
+
+- name: docker compose up application
+  command: docker-compose up --force-recreate -d chdir={{ verboice.app_dir }}

@@ -1,18 +1,23 @@
 - hosts: all
   roles:
-    # - ansible-pull
-    # - network
+    - ansible-pull
+    - network
     - mysql
     - guisso
-    - hub
     - nuntium
     - theme
+    - ask
+    - asterisk
+    - verboice
   vars:
     avahi_hostname: instedd
     avahi_aliases:
       - login.instedd
       - nuntium.instedd
-      - hub.instedd
       - theme.instedd
+      - ask.instedd
+      - verboice.instedd
+      - verboice-broker.instedd
+      - avahi.instedd
     local:
       domainname: local

@@ -1,0 +1,5 @@
+---
+
+- name: restart asterisk
+  command: /etc/init.d/asterisk restart
+  ignore_errors: yes

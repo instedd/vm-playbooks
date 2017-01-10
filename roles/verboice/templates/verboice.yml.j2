@@ -1,0 +1,9 @@
+broker_host: "{{ verboice.broker.hostname | withdomain(verboice.broker.domainname) }}"
+broker_port: 9999
+ispeech_format: mp3
+asset_host: "{{ verboice.hostname | asurl(verboice.domainname) }}"
+default_url_options:
+  host: "{{ verboice.hostname | withdomain(verboice.domainname) }}"
+  protocol: http
+default_mailer_options:
+  from: "noreply@{{ verboice.hostname | withdomain(verboice.domainname) }}"

@@ -7,7 +7,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "ubuntu/trusty64"
   config.vm.hostname = "instedd.local"
-  config.vm.network "public_network"
+  config.vm.network "public_network", ip: "192.168.0.30"
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "4096"]

@@ -1,0 +1,15 @@
+---
+ask:
+  version: "0.4.2"
+  hostname: "{{ local.hostname | default('ask.instedd') }}"
+  domainname: "{{ local.domainname | default('local') }}"
+  app_dir: /u/apps/ask
+
+  nuntium:
+    url: "{{ nuntium.hostname | asurl(nuntium.domainname) }}"
+    account_name: pollit
+    account_pass: pollit
+    application: pollit
+    pass: pollit
+    interface_user: pollit
+    interface_pass: pollit

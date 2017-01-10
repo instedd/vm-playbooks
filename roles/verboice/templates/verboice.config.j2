@@ -1,0 +1,45 @@
+[
+  {verboice, [
+    {asterisk_config_dir, "/etc/asterisk"},
+    {asterisk_sounds_dir, "/var/lib/asterisk/sounds"},
+    {asterisk_agi_use_pipe_separator, false},
+    {broker_host, "localhost"},
+    {broker_port, {{ verboice.broker.port }}},
+    {broker_ip, any},
+    {base_url, "{{ verboice.hostname | asurl(verboice.domainname) }}"},
+    {record_dir, "{{ verboice.app_dir }}/current/data/call_logs/"},
+
+    {seconds_between_calls, 8},
+    {seconds_for_call_back, 30},
+
+    {ami_host, "{{ ansible_docker0.ipv4.address }}"},
+
+    {db_name, "verboice"},
+    {db_user, "root"},
+    {db_pass, "{{ mysql.root_password }}"},
+    {db_host, "{{ ansible_docker0.ipv4.address }}"},
+
+    {crypt_secret, "{{ verboice.encription_key }}"},
+
+    {nuntium_host, ""},
+    {nuntium_account, ""},
+    {nuntium_app, ""},
+    {nuntium_app_password, ""},
+
+    {guisso_client_id, "{{ verboice_guisso.client_id | default('') }}"},
+    {guisso_client_secret, "{{ verboice_guisso.client_secret | default('') }}"},
+    {guisso_url, "{{ verboice.guisso.url | default('') }}"},
+
+    {hub_enabled, false},
+    {hub_url, ""},
+
+    {twilio_callback_url, ""}
+  ]},
+
+  {lager, [
+    {handlers, [
+      {lager_console_backend, [info, {lager_default_formatter, [time,color," [",severity,"] [",{pid,"unknown_pid"},"|",{short_activity,"undefined"},"] ",{module,"unknown_module"},": ",message,"\e[0m\r\n"]}]}
+    ]},
+    {colored, true}
+  ]}
+].

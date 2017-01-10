@@ -1,0 +1,28 @@
+verboice:
+  version: dev
+  app_dir: /u/apps/verboice
+  hostname: "{{ local.hostname | default('verboice.instedd') }}"
+  domainname: "{{ local.domainname | default('local') }}"
+  encription_key: "SECRETKEY"
+
+  broker:
+    hostname: "{{ local.hostname | default('verboice-broker.instedd') }}"
+    domainname: "{{ local.domainname | default('local') }}"
+    port: 19000
+
+  nuntium:
+    host: "{{ nuntium.hostname | withdomain(nuntium.domainname) }}"
+    account_name: verboice
+    account_pass: verboice
+    application: verboice
+
+  hub:
+    enabled: true
+    url: "{{ hub.hostname | asurl(hub.domainname) }}"
+
+  guisso:
+    enabled: true
+    url: "{{ guisso.hostname | asurl(guisso.domainname) }}"
+
+  theme:
+    url: "{{ theme.hostname | asurl(theme.domainname) | default('http://theme.instedd.org/') }}"

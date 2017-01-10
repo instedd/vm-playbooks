@@ -1,0 +1,26 @@
+# {{ ansible_managed }}
+
+app:
+  image: 'instedd/ask:{{ ask.version }}'
+  container_name: ask
+  hostname: "{{ ask.hostname }}"
+  domainname: "{{ ask.domainname }}"
+  restart: "{{ docker.restart_policy }}"
+  dns: "{{ ansible_docker0.ipv4.address }}"
+  environment:
+    DATABASE_HOST: "{{ ansible_docker0.ipv4.address }}"
+    DATABASE_PASS: "{{ mysql.root_password }}"
+    GZIP_COMPRESSION_TYPE: text/html text/plain text/css application/javascript text/javascript
+    HOST: "{{ ask.hostname | withdomain(ask.domainname) }}"
+    VIRTUAL_HOST: "{{ ask.hostname | withdomain(ask.domainname) }}"
+    NUNTIUM_APP_ID: nuntium.instedd.local
+    NUNTIUM_BASE_URL: {{ nuntium.hostname | asurl(nuntium.domainname) }}
+    NUNTIUM_CLIENT_ID: "{{ ask_guisso.client_id | default('') }}"
+    NUNTIUM_CLIENT_SECRET: "{{ ask_guisso.client_secret | default('') }}"
+    NUNTIUM_GUISSO_BASE_URL: {{ guisso.hostname | asurl(guisso.domainname) }}
+    SECRET_KEY_BASE: 0RheqmWxkm9O1x0XPIp171z01Wz9xDErq0xCnjDISpjK1C4YpI7rTSQhJk97TuxfKnKWSDKCJkvSh5iZF4ua3Q
+    VERBOICE_APP_ID: verboice.instedd.local
+    VERBOICE_BASE_URL: http://verboice.instedd.local
+    VERBOICE_CLIENT_ID: "{{ ask_guisso.client_id | default('') }}"
+    VERBOICE_CLIENT_SECRET: "{{ ask_guisso.client_secret | default('') }}"
+    VERBOICE_GUISSO_BASE_URL: {{ guisso.hostname | asurl(guisso.domainname) }}

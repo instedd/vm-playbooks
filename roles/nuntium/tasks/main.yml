@@ -58,3 +58,7 @@
 
 - name: docker compose up application
   command: docker-compose up --force-recreate --no-deps -d web workerfast workerslow xmpp smpp msn cron sched chdir={{ nuntium.app_dir }}
+
+- name: register extra nuntium port for nameless local gateway connections
+  template: src=nginx.j2 dest=/etc/nginx/sites-enabled/nuntium-extra mode=0644 owner=root group=root
+  notify: restart nginx

@@ -1,9 +1,10 @@
 ---
 nuntium:
-  version: "1.5.1"
+  version: "1.9.1"
   hostname: "{{ local.hostname | default('nuntium.instedd') }}"
   domainname: "{{ local.domainname | default('local') }}"
   app_dir: /u/apps/nuntium
+  extra_port: 9000
 
   amqp:
     user: nuntium

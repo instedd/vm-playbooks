@@ -7,7 +7,7 @@ web: &defaults
   domainname: {{ pollit.domainname }}
   dns: "{{ ansible_docker0.ipv4.address }}"
   environment:
-    DATABASE_URL: mysql2://root:root@{{ ansible_docker0.ipv4.address }}/pollit
+    DATABASE_URL: mysql2://root:{{ mysql.root_password }}@{{ ansible_docker0.ipv4.address }}/pollit
     VIRTUAL_HOST: "{{ pollit.hostname | withdomain(pollit.domainname) }}"
   volumes:
     - 'config/guisso.yml:/app/config/guisso.yml'

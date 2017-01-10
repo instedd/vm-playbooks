@@ -1,0 +1,55 @@
+---
+
+- name: install asterisk dependencies
+  apt:
+    name:
+      - build-essential
+      - pkg-config
+      - libncurses5-dev
+      - uuid-dev
+      - libjansson-dev
+      - libsqlite3-dev
+      - postfix
+      - festival
+      - sox
+      - libsox-fmt-mp3
+      - libxml2-dev
+      - libxslt1-dev
+
+- name: copy asterisk install scripts
+  copy: src={{ item }} dest=/home/vagrant/{{ item }} mode=0777
+  with_items:
+    - install-pjsip.sh
+    - install-asterisk.sh
+
+- name: install pjsip
+  shell: ./install-pjsip.sh
+  args:
+    chdir: /home/vagrant
+    creates: /usr/lib/libpj.so
+
+- name: install asterisk
+  shell: ./install-asterisk.sh
+  args:
+    chdir: /home/vagrant
+    creates: /etc/init.d/asterisk
+  register: asterisk_install
+
+- name: install custom asterisk config
+  template: src={{ item }}.conf dest=/etc/asterisk/{{ item }}.conf
+  with_items:
+    - amd
+    - ari
+    - cli_aliases
+    - extensions
+    - manager
+    - modules
+    - pjsip
+    - sip
+  notify: restart asterisk
+
+- name: touch pjsip verboice files
+  file: path=/etc/asterisk/pjsip_verboice.conf state=touch owner={{ ansible_ssh_user }} group={{ ansible_ssh_user }} mode=0664
+
+- name: create sound folder for verboice
+  file: path=/var/lib/asterisk/sounds/verboice state=directory owner={{ ansible_ssh_user }} group={{ ansible_ssh_user }}

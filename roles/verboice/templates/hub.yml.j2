@@ -1,0 +1,6 @@
+enabled: {{ verboice.hub.enabled }}
+{% if verboice.hub.enabled %}
+url: {{ verboice.hub.url }}
+connector_guid: {{ verboice_hub.guid }}
+token: {{ verboice_hub.secret_token }}
+{% endif %}

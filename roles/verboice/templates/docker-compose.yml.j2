@@ -1,0 +1,39 @@
+# {{ ansible_managed }}
+
+web:
+  image: instedd/verboice:{{ verboice.version }}
+  container_name: verboice
+  restart: "{{ docker.restart_policy }}"
+  hostname: "{{ verboice.hostname }}"
+  domainname: {{ verboice.domainname }}
+  dns: "{{ ansible_docker0.ipv4.address }}"
+  environment:
+    DATABASE_URL: mysql2://root:{{ mysql.root_password }}@{{ ansible_docker0.ipv4.address }}/verboice
+    VIRTUAL_HOST: "{{ verboice.hostname | withdomain(verboice.domainname) }}"
+    INSTEDD_THEME: "{{ verboice.theme.url}}"
+  volumes:
+    - 'config/guisso.yml:/app/config/guisso.yml'
+    - 'config/verboice.yml:/app/config/verboice.yml'
+    - 'config/hub.yml:/app/config/hub.yml'
+    - 'config/credentials.yml:/app/config/credentials.yml'
+    - 'config/poirot.yml:/app/config/poirot.yml'
+    - 'log:/app/log'
+
+broker:
+  image: instedd/verboice-broker:{{ verboice.version }}
+  command: "make run"
+  container_name: verboice-broker
+  restart: "{{ docker.restart_policy }}"
+  hostname: "{{ verboice.broker.hostname }}"
+  domainname: {{ verboice.broker.domainname }}
+  dns: "{{ ansible_docker0.ipv4.address }}"
+  ports:
+    - "127.0.0.1:19000:19000"
+  environment:
+    VIRTUAL_HOST: "{{ verboice.broker.hostname | withdomain(verboice.broker.domainname) }}"
+    RAILS_ENV: production
+  volumes:
+    - 'config/verboice.config:/app/verboice.config'
+    - 'log:/app/log'
+    - '/etc/asterisk/:/etc/asterisk/'
+    - '/var/lib/asterisk/sounds/verboice/:/var/lib/asterisk/sounds/verboice/'
