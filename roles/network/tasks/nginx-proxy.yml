@@ -6,6 +6,9 @@
 - name: setup template for nginx conf
   copy: src=nginx.tmpl dest=/etc/templates/
 
+- name: set nginx custom config
+  copy: src=nginx-custom.conf dest=/etc/nginx/conf.d/custom.conf mode=0644
+
 - name: register service for docker gen nginx
   copy: src=docker-gen-nginx.conf dest=/etc/init/ mode=0644
   notify: restart docker-gen-nginx
